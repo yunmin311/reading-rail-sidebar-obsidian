@@ -1,0 +1,7 @@
+# 运行时状态：记录 vault 内的笔记路径，属用户数据而非插件代码
+data.json
+
+# 日志与编辑器临时文件
+*.log
+.DS_Store
+Thumbs.db

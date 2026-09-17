@@ -1,0 +1,315 @@
+/* ============================================================
+   Reading Rail Sidebar — styles
+   全部选择器限定在 .rrs- 前缀下，不改动任何主题变量与全局类，
+   颜色一律取 Obsidian 主题变量，深浅色 / 纸纹主题自动适配。
+   ============================================================ */
+
+.rrs-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
+/* ---------- 顶部：进度 ---------- */
+
+.rrs-head {
+  flex: 0 0 auto;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.rrs-head-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rrs-percent {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-normal);
+  font-variant-numeric: tabular-nums;
+}
+
+.rrs-count {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.rrs-bar {
+  height: 3px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--background-modifier-border);
+  overflow: hidden;
+}
+
+.rrs-bar-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--interactive-accent);
+  transition: width 120ms ease-out;
+}
+
+.rrs-current {
+  margin-top: 9px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.rrs-resume {
+  margin-top: 7px;
+}
+
+.rrs-resume-btn {
+  font-size: 11px;
+  color: var(--text-accent);
+  cursor: pointer;
+}
+
+.rrs-resume-btn:hover {
+  color: var(--text-accent-hover);
+  text-decoration: underline;
+}
+
+/* ---------- 标题树 ---------- */
+
+.rrs-tree {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 0 10px;
+  scrollbar-gutter: stable;
+}
+
+.rrs-item {
+  display: block;
+  padding: 5px 14px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 90ms ease-out, color 90ms ease-out;
+}
+
+.rrs-item:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.rrs-item.is-active {
+  color: var(--text-normal);
+  background: color-mix(in srgb, var(--interactive-accent) 13%, transparent);
+  box-shadow: inset 2px 0 0 var(--interactive-accent);
+}
+
+.rrs-item-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.rrs-l2 {
+  padding-left: 14px;
+}
+
+.rrs-l3 {
+  padding-left: 26px;
+  font-size: 11.5px;
+}
+
+.rrs-l4 {
+  padding-left: 38px;
+  font-size: 11px;
+}
+
+/* ---------- 空态 ---------- */
+
+.rrs-note {
+  padding: 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+/* ============================================================
+   右侧刻度条（取代原生滚动条）
+   ------------------------------------------------------------
+   一列均匀的短横线，浮在阅读视图右缘。点任意高度跳转到全篇对应
+   百分比；当前位置用一根高亮杠标示。
+   原生滚动条在末尾被隐掉 —— 想恢复，注释掉那两条即可。
+   ============================================================ */
+
+/* 让 .view-content 成为定位基准（它本身没有 position）。
+   限定在 markdown leaf 内，不影响其它视图。 */
+.workspace-leaf-content[data-type="markdown"] > .view-content {
+  position: relative;
+}
+
+/* ============================================================
+   右侧刻度条
+   ------------------------------------------------------------
+   视觉规格对齐 crisp-reading-rail —— 它好看的几个点：
+   ① 一条 1px 竖向渐变轨道线，中段最亮、两端透明（不是硬邦邦的实线）
+   ② 刻度用 color-mix 调出的柔和色，不是生硬的 --text-faint
+   ③ 读过的刻度缩短变淡 —— 默认关闭（设置里可开），留着是因为它是 crisp 的招牌效果
+   ④ 当前所在标题那一杠变成 accent 色、加粗到 2px
+   ⑤ 上下各留 18px、离右边 10px，不顶天立地
+   ============================================================ */
+
+.rrs-ticks {
+  /* 上上轮 text-muted 48% 太淡（看不见），上轮 text-normal 62% 太深（发黑），
+     这里取中间：text-muted 提到 78%，既有分量又不抢眼 */
+  --rrs-muted: color-mix(in srgb, var(--text-muted) 78%, transparent);
+  --rrs-accent: var(--interactive-accent);
+
+  position: absolute;
+  /* 集中在右下：只占下半部分，不跟顶部工具栏和正文首屏抢视觉 */
+  right: 10px;
+  bottom: 20px;
+  height: 46%;
+  /* 最长刻度 28px + 右侧 7px 边距 + 1px 余量 —— 容器必须装得下，
+     否则长刻度会溢出到正文上去（指针命中区也跟着对不上） */
+  width: 36px;
+  z-index: 1;
+  cursor: pointer;
+  /* 拖动时不让浏览器把手指/指针手势抢去当滚动 */
+  touch-action: none;
+}
+
+.rrs-ticks.is-dragging {
+  cursor: grabbing;
+}
+
+/* ②③ 基础刻度：柔和色；读过的缩短变淡（默认关闭，见设置项） */
+.rrs-ticks__base {
+  position: absolute;
+  inset: 0 7px 0 auto;
+  width: 29px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.rrs-ticks__tick {
+  /* 长度由 JS 按「该处的文本密度」设置（8–28px，见 main.js 的 MIN_W / MAX_W）；
+     这里只是 JS 还没跑时的兜底值。
+     粗细（height）所有刻度统一 1px —— 只有长度随密度变，线宽不变。 */
+  width: 8px;
+  height: 1px;
+  border-radius: 999px;
+  background: var(--rrs-muted);
+  /* 原来 0.45 偏淡：之前是「读过变灰」把它压到了 0.2，关掉该功能后
+     整列回到 0.45 仍偏虚，这里提到 0.55 —— 再深就开始抢正文了。 */
+  opacity: 0.55;
+  transform-origin: right center;
+  transition:
+    opacity 110ms cubic-bezier(0.23, 1, 0.32, 1),
+    width 140ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 110ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* 「读过的刻度变灰」—— 设置项默认关闭（qy：开着会让整列都不明显）。
+   打开后：已滚过部分缩短到 64%、淡到 0.2，留下阅读痕迹。 */
+.rrs-ticks__tick.is-read {
+  transform: scaleX(0.64);
+  opacity: 0.2;
+}
+
+/* ④ 标题刻度：按层级变长；当前那条高亮 */
+.rrs-ticks__heads {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* 层级分级已弃用 —— 刻度长度改由「该处的文本密度」决定（类似视频进度条
+     底下的峰值图）。这块代码保留着，想恢复层级分级删掉这行即可。 */
+  display: none;
+}
+
+.rrs-ticks__head {
+  position: absolute;
+  right: 7px;
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--rrs-muted);
+  opacity: 0.85;
+  transform: translateY(-50%);
+  transform-origin: right center;
+  transition:
+    opacity 110ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 110ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* 层级越浅越长，且拉大级差 —— 原来 16/24/20 之间只差 4px，看不出来 */
+.rrs-ticks__head[data-level="1"] {
+  width: 28px;
+}
+
+.rrs-ticks__head[data-level="2"] {
+  width: 24px;
+}
+
+.rrs-ticks__head[data-level="3"] {
+  width: 19px;
+}
+
+.rrs-ticks__head[data-level="4"] {
+  width: 16px;
+}
+
+.rrs-ticks__head.is-active {
+  height: 2px;
+  background: var(--rrs-accent);
+  opacity: 0.9;
+}
+
+/* ⑤ 当前位置 */
+.rrs-ticks__now {
+  position: absolute;
+  right: 7px;
+  width: 28px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--rrs-accent);
+  opacity: 0.58;
+  transform: translateY(-50%);
+  transition: top 90ms ease-out;
+  pointer-events: none;
+}
+
+/* ---------- 隐掉原生上下滚动条 ----------
+   ⚠️ 阅读视图真正滚动的容器是 .view-content（border-polished 片段就是给它
+   设的滚动条样式），不是 .markdown-preview-view —— 只写后者不会命中。
+   三个一起覆盖，编辑视图也顺带照顾到。 */
+.workspace-leaf-content[data-type="markdown"] .view-content::-webkit-scrollbar,
+.workspace-leaf-content[data-type="markdown"] .markdown-preview-view::-webkit-scrollbar,
+.workspace-leaf-content[data-type="markdown"] .cm-scroller::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+}
+
+.workspace-leaf-content[data-type="markdown"] .view-content,
+.workspace-leaf-content[data-type="markdown"] .markdown-preview-view,
+.workspace-leaf-content[data-type="markdown"] .cm-scroller {
+  scrollbar-width: none !important;
+}

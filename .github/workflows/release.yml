@@ -1,0 +1,47 @@
+name: Release plugin
+
+on:
+  push:
+    tags: ["*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # tag 必须与 manifest.json 里的 version 完全一致 —— 这是 Obsidian
+      # 社区市场安装插件的唯一依据：它拿 manifest 的 version 去找同名 Release。
+      # 写成 v1.0.0 或 1.0.0-beta 都会让市场找不到，所以这里硬校验、对不上直接失败。
+      - name: Version must match tag
+        run: |
+          version=$(node -p "require('./manifest.json').version")
+          tag="${GITHUB_REF_NAME}"
+          if [ "$version" != "$tag" ]; then
+            echo "::error::tag '$tag' 与 manifest.json 的 version '$version' 不一致"
+            echo "修正方式：要么改 manifest 版本号，要么删掉这个 tag 重打。"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+        id: check
+
+      # 资产清单写死在这里：市场只会去 Release 里下这三个文件。
+      # styles.css 如果不存在，Obsidian 会跳过它（不是错误），所以按需传入。
+      - name: Collect assets
+        id: assets
+        run: |
+          files="manifest.json main.js"
+          [ -f styles.css ] && files="$files styles.css"
+          echo "files=$files" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes \
+            ${{ steps.assets.outputs.files }}
