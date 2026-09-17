@@ -1,0 +1,25 @@
+# 统一行尾为 LF。
+#
+# 为什么需要这个文件：
+#   本机 git 的 core.autocrlf=true，Windows 检出时会把文本文件改写成 CRLF；
+#   而 GitHub Actions 跑在 Linux 上，git 又把它规范化成 LF。
+#   结果同一个文件「本地一份 CRLF、Release 里一份 LF」，
+#   SHA256 对不上 —— 排查起来极费劲，且两者内容其实完全相同。
+#
+#   显式声明 text=lf 后，仓库里、本地工作区、CI 产物三处字节一致，
+#   sync-plugins.ps1 的 SHA256 校验也就不会出现这种假 drift。
+#
+# 注意 binary 那两行：图标等二进制资源必须排除在行尾转换之外，
+# 否则 git 会「帮忙」改写字节，直接损坏文件。
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.zip binary
