@@ -37,13 +37,8 @@ Tick **thickness** is uniform; only length varies. The tick you are currently
 reading is highlighted.
 
 **Interaction:** drag anywhere on the rail to scrub, or click a spot to jump
-there. It behaves like the scrollbar you replaced.
-
-![Density ticks in reading view](docs/shot-reading-ticks.png)
-
-The rail works in edit view too, following the same document:
-
-![Density ticks in edit view](docs/shot-edit-ticks.png)
+there. It behaves like the scrollbar you replaced. The rail works in edit view
+too, following the same document.
 
 ## Why
 
