@@ -1,7 +1,7 @@
 {
   "id": "reading-rail-sidebar",
   "name": "Reading Rail Sidebar",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "1.4.0",
   "description": "Track reading progress in a sidebar panel with a heading outline, a density rail, and per-file resume positions.",
   "author": "yunmin311",
