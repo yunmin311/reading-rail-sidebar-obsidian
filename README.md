@@ -11,6 +11,8 @@ long note into one panel on the right, and lets you get back to that spot later.
 
 ## What's in the panel
 
+![Panel with progress, outline and resume hint](docs/shot-panel.png)
+
 - **Progress** — percentage and a progress bar for the current note.
 - **Current heading** — follows the section you are reading and shows
   `n / total` as you move through it.
