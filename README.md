@@ -37,6 +37,12 @@ reading is highlighted.
 **Interaction:** drag anywhere on the rail to scrub, or click a spot to jump
 there. It behaves like the scrollbar you replaced.
 
+![Density ticks in reading view](docs/shot-reading-ticks.png)
+
+The rail works in edit view too, following the same document:
+
+![Density ticks in edit view](docs/shot-edit-ticks.png)
+
 ## Why
 
 Obsidian's built-in outline tells you the structure; the scrollbar tells you a
