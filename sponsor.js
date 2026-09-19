@@ -1,25 +1,21 @@
 /* 赞助区块。
-
-   刻意做成一个独立小节而不是塞进说明文字里：详情页是用户唯一会认真读的
-   地方，藏起来等于没有。区块只渲染链接，不引任何外部脚本或图片 ——
-   插件必须保持零网络请求，否则会在社区市场审核时被质疑。
-
-   为什么国内 / 海外分开列：两条链路的可用性完全不同，
-   只给一条总有一半用户点不开。 */
+ *
+ * 刻意做成一个独立小节而不是塞进说明文字里：设置页是用户唯一会认真读的
+ * 地方，藏起来等于没有。区块只渲染链接，不引任何外部脚本或图片 ——
+ * 插件必须保持零网络请求，否则会在社区市场审核时被质疑。
+ *
+ * 为什么只有 GitHub Sponsors 一条：
+ *   最初国内 / 海外分列（爱发电 + Ko-fi），但 qy 决定统一走 GitHub ——
+ *   单一入口便于维护，也避免在插件里出现多个可能失效/需要实名认证的平台。
+ *   保留 SPONSORS 数组结构（而不是塌成一个字符串），是为了将来真要加
+ *   第二条时改数据即可，不用动渲染代码。
+ */
 
 "use strict";
 
-const SPONSORS = {
-  // 海外：GitHub Sponsors 覆盖绝大多数国际信用卡 / PayPal。
-  overseas: [
-    { label: "GitHub Sponsors", url: "https://github.com/sponsors/yunmin311" },
-  ],
-  // 国内：爱发电支持微信 / 支付宝，无需外币卡。
-  domestic: [
-    { label: "爱发电", url: "https://afdian.com/a/yunmin311" },
-    { label: "Ko-fi", url: "https://ko-fi.com/yunmin311" },
-  ],
-};
+const SPONSORS = [
+  { label: "GitHub Sponsors", url: "https://github.com/sponsors/yunmin311" },
+];
 
 function linkRow(parent, label, url) {
   const a = parent.createEl("a", { cls: "sp-link", text: label, href: url });
@@ -33,16 +29,8 @@ function renderSponsor(parent, t) {
   box.createDiv({ cls: "sp-title", text: t("sponsor.title") });
   box.createDiv({ cls: "sp-body", text: t("sponsor.body") });
 
-  const grid = box.createDiv({ cls: "sp-grid" });
-  for (const [key, links] of [
-    ["sponsor.overseas", SPONSORS.overseas],
-    ["sponsor.domestic", SPONSORS.domestic],
-  ]) {
-    if (!links.length) continue;
-    const col = grid.createDiv({ cls: "sp-col" });
-    col.createDiv({ cls: "sp-col-head", text: t(key) });
-    for (const l of links) linkRow(col, l.label, l.url);
-  }
+  const row = box.createDiv({ cls: "sp-row" });
+  for (const l of SPONSORS) linkRow(row, l.label, l.url);
 }
 
 module.exports = { renderSponsor, SPONSORS };

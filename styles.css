@@ -384,27 +384,21 @@
   line-height: 1.55;
 }
 
-.sp-grid {
+/* 单一入口（GitHub Sponsors）。做成一行链接，
+   不再有国内 / 海外分列 —— 见 sponsor.js 顶部注释。 */
+.sp-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5em;
 }
 
-.sp-col-head {
-  margin-bottom: 0.25em;
-  color: var(--text-faint);
-  font-size: 0.8em;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.sp-col a.sp-link {
+.sp-row a.sp-link {
   display: block;
   padding: 0.15em 0;
   color: var(--text-accent);
   text-decoration: none;
 }
 
-.sp-col a.sp-link:hover {
+.sp-row a.sp-link:hover {
   text-decoration: underline;
 }

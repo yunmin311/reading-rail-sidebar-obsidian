@@ -10,9 +10,7 @@ const COMMON = {
       "设置页、命令与提示的显示语言。「跟随 Obsidian」会随界面语言自动切换。",
     "sponsor.title": "赞助支持",
     "sponsor.body":
-      "这些插件都是独立开发并免费开源的，没有任何商业绑定。如果它确实省下了时间，可以通过下面的方式支持后续维护。",
-    "sponsor.overseas": "海外",
-    "sponsor.domestic": "国内",
+      "这些插件都是独立开发并免费开源的，没有任何商业绑定。如果它确实省下了时间，可以通过 GitHub Sponsors 支持后续维护。",
     "meta.version": "版本",
     "meta.repository": "仓库",
     "common.reset": "恢复默认",
@@ -25,9 +23,7 @@ const COMMON = {
       'Language for this settings page, commands and notices. "Follow Obsidian" tracks the app language.',
     "sponsor.title": "Sponsorship",
     "sponsor.body":
-      "These plugins are built independently and released free and open-source, with no commercial tie-in. If one of them saves you time, you can support ongoing maintenance through the links below.",
-    "sponsor.overseas": "International",
-    "sponsor.domestic": "China",
+      "These plugins are built independently and released free and open-source, with no commercial tie-in. If one of them saves you time, you can support ongoing maintenance via GitHub Sponsors.",
     "meta.version": "Version",
     "meta.repository": "Repository",
     "common.reset": "Restore defaults",

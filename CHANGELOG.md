@@ -3,6 +3,24 @@
 All notable changes to this plugin are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
+## 0.2.2
+
+- Sponsorship now points at GitHub Sponsors only; the previous
+  international/China split (Ko-fi, 爱发电) has been removed.
+
+## 0.2.1
+
+- **Fixed: the plugin failed to load in Obsidian.** 0.2.0 split the code into
+  sibling modules and pulled them in with `require("./i18n")`. Obsidian injects
+  a whitelist `require` that resolves *only* `obsidian`, `@codemirror/*` and
+  `@lezer/*`; anything else falls through to Electron's `window.require`, which
+  resolves relative paths against Obsidian's install directory rather than the
+  plugin folder. The call returned `undefined` and the plugin threw
+  `Cannot destructure property 'bindI18n' of 'require(...)' as it is undefined.`
+  The three modules are now inlined into `main.js`, which is self-contained.
+  The readable sources are still shipped as `i18n.js` / `locales.js` /
+  `sponsor.js` and are inlined by a packaging step.
+
 ## 0.2.0
 
 - Bilingual interface: settings page, the panel itself (empty state, heading

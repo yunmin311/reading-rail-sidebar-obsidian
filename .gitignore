@@ -5,3 +5,7 @@ data.json
 *.log
 .DS_Store
 Thumbs.db
+
+# 本地备份文件（改 main.js 前的存档）
+*.bak
+*.bak-*
