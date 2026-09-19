@@ -28,14 +28,23 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
         id: check
 
-      # 资产清单写死在这里：市场只会去 Release 里下这三个文件。
-      # styles.css 如果不存在，Obsidian 会跳过它（不是错误），所以按需传入。
+      # 资产清单 = manifest + 仓库根下所有 .js + styles.css。
+      #
+      # 这里刻意用通配扫描而不是写死文件名：插件用 require("./x") 加载同目录
+      # 的伴随模块（i18n.js / locales.js / sponsor.js …），少传一个，
+      # 用户从 Release 装上就是 MODULE_NOT_FOUND，而且是打开设置页才炸。
+      # 写死清单时踩过这个坑 —— 加了 i18n.js 却忘了改工作流。
+      #
+      # .js 通配会连 main.js 一起带上，所以不再单独列它。
+      # styles.css 只在存在时传（没有它不是错误）。
       - name: Collect assets
         id: assets
         run: |
-          files="manifest.json main.js"
+          files="manifest.json"
+          for f in *.js; do [ -f "$f" ] && files="$files $f"; done
           [ -f styles.css ] && files="$files styles.css"
           echo "files=$files" >> "$GITHUB_OUTPUT"
+          echo "将上传：$files"
 
       - name: Create release
         env:
