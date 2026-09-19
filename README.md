@@ -83,6 +83,16 @@ plugins.
 **Beta builds:** add `yunmin311/reading-rail-sidebar-obsidian` to
 [BRAT](https://github.com/TfTHacker/obsidian42-brat).
 
+## Language
+
+The settings page, the panel itself, command names, the view title and every
+notice are available in **Chinese and English**. Pick a language at the top of
+the settings page: `Auto` follows Obsidian's own language, or pin it to
+`简体中文` / `English` explicitly.
+
+Adding another language is a pure data change — an extra entry in
+`locales.js` — with no build step involved.
+
 ## Privacy
 
 No network access. No telemetry. No accounts. Reading positions are stored
